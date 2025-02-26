@@ -41,6 +41,8 @@ function initSlingshot() {
       },
     });
 
+    let dragStartPosition;
+
     Render.run(render);
 
     // create runner
@@ -188,6 +190,7 @@ function initSlingshot() {
     Events.on(mouseConstraint, "startdrag", function (event) {
       if (event.body === rock) {
         console.log("ok1");
+        dragStartPosition = { x: rock.position.x, y: rock.position.y };
         // ドラッグ中は壁とのみ衝突（他のオブジェクトとは衝突しない）
         rock.collisionFilter.mask = 0x0001;
       }
@@ -198,8 +201,9 @@ function initSlingshot() {
       if (event.body === rock) {
         // ドラッグ終了時には通常通りすべてと衝突
         rock.collisionFilter.mask = 1;
-        const testInfo = getLanchRockInfo(rock, anchor);
-        console.log(testInfo);
+        const lanchVec = getLanchRockInfo(rock, anchor);
+        Body.setPosition(rock, { x: anchor.x, y: anchor.y });
+        console.log(lanchVec);
         setTimeout(function () {
           rockLaunched = true;
           elastic.bodyB = null;
@@ -208,8 +212,8 @@ function initSlingshot() {
             rock,
             Matter,
             {
-              x: testInfo.normalizedDirection.x * testInfo.strength,
-              y: testInfo.normalizedDirection.y * testInfo.strength,
+              x: lanchVec.normalizedDirection.x * lanchVec.strength,
+              y: lanchVec.normalizedDirection.y * lanchVec.strength,
             },
             false
           );
