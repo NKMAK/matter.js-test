@@ -120,9 +120,10 @@ function initSlingshot() {
           Body.setSpeed(rock, 4);
         }
         console.log(mousePosition);
+        /*ここをコメントでドラッグによって弾が飛ばなくなる
         rockLaunched = true;
         elastic.bodyB = null;
-        elastic.render.visible = false;
+        elastic.render.visible = false;*/
       }
 
       // ボールが発射され、速度が十分低くなり、地面に近い場合のみ停止処理を行う
@@ -200,6 +201,9 @@ function initSlingshot() {
         const testInfo = getLanchRockInfo(rock, anchor);
         console.log(testInfo);
         setTimeout(function () {
+          rockLaunched = true;
+          elastic.bodyB = null;
+          elastic.render.visible = false;
           launchRock(
             rock,
             Matter,
