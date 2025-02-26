@@ -1,9 +1,10 @@
 // npmでインストールしたMatter.jsをインポート
 import Matter from "matter-js";
-import { goalObj } from "./src/object/goal";
-import { eventCollision } from "./src/func/collosion";
-import { launchRock } from "./src/func/launchRock";
-import { createWallStatge1 } from "./src/object/wall";
+import { goalObj } from "./object/goal";
+import { eventCollision } from "./func/collosion";
+import { launchRock } from "./func/launchRock";
+import { createWallStatge1 } from "./object/wall";
+import { getLanchRockInfo } from "./func/getLanchRockInfo";
 
 // グローバルにMatterを提供（slingshot.jsで使用できるようにする）
 window.Matter = Matter;
@@ -105,10 +106,6 @@ function initSlingshot() {
 
     eventCollision(Events, engine);
 
-    setTimeout(function () {
-      launchRock(rock, Matter, { x: 2, y: -2 }, false);
-    }, 2000);
-
     Events.on(engine, "afterUpdate", function () {
       // ボールが発射されたかチェック
       if (
@@ -200,6 +197,19 @@ function initSlingshot() {
       if (event.body === rock) {
         // ドラッグ終了時には通常通りすべてと衝突
         rock.collisionFilter.mask = 1;
+        const testInfo = getLanchRockInfo(rock, anchor);
+        console.log(testInfo);
+        setTimeout(function () {
+          launchRock(
+            rock,
+            Matter,
+            {
+              x: testInfo.normalizedDirection.x * testInfo.strength,
+              y: testInfo.normalizedDirection.y * testInfo.strength,
+            },
+            false
+          );
+        }, 2000);
       }
     });
 
