@@ -1,6 +1,6 @@
 export function launchRock(rock, Matter, vector, useForce) {
   //vector{x:y:}
-
+  console.log(vector);
   if (vector.x === 0 && vector.y === 0) {
     console.warn("発射ベクトルがゼロ");
     return;
