@@ -3,6 +3,7 @@ import Matter from "matter-js";
 import { goalObj } from "./src/object/goal";
 import { eventCollision } from "./src/func/collosion";
 import { launchRock } from "./src/func/launchRock";
+import { createWallStatge1 } from "./src/object/wall";
 
 // グローバルにMatterを提供（slingshot.jsで使用できるようにする）
 window.Matter = Matter;
@@ -50,19 +51,6 @@ function initSlingshot() {
     engine.velocityIterations = 10; // デフォルトより高い値（デフォルト: 4）
 
     // 画面の端に壁を追加
-    var wallOptions = {
-      isStatic: true,
-      render: { fillStyle: "#060a19" },
-      restitution: 0.6, // 跳ね返り係数を設定
-      chamfer: { radius: 0 }, // 角を鋭角に
-      slop: 0, // 衝突時の許容誤差を小さく
-    };
-
-    // 壁を少し厚くして貫通しにくくする
-    var ground = Bodies.rectangle(510, 800, 1020, 20, wallOptions);
-    var leftWall = Bodies.rectangle(0, 400, 20, 810, wallOptions);
-    var rightWall = Bodies.rectangle(1025, 400, 20, 800, wallOptions);
-    var topWall = Bodies.rectangle(510, 0, 1020, 20, wallOptions);
 
     // ボールの初期位置を中央寄りに
     var rock = Bodies.polygon(250, 600, 8, 20, rockOptions, { label: "ball" });
@@ -100,11 +88,6 @@ function initSlingshot() {
       });
     });
 
-    var ground2 = Bodies.rectangle(610, 250, 200, 20, {
-      isStatic: true,
-      render: { fillStyle: "#060a19" },
-    });
-
     var pyramid2 = Composites.pyramid(550, 0, 5, 10, 0, 0, function (x, y) {
       return Bodies.rectangle(x, y, 25, 40);
     });
@@ -112,18 +95,9 @@ function initSlingshot() {
     const goal = goalObj(Bodies);
     console.log(goal);
     // 全ての物体をワールドに追加
-    Composite.add(engine.world, [
-      ground,
-      leftWall,
-      rightWall,
-      topWall,
-      pyramid,
-      ground2,
-      pyramid2,
-      rock,
-      elastic,
-      goal,
-    ]);
+    createWallStatge1(Bodies, Composite, engine);
+
+    Composite.add(engine.world, [pyramid, pyramid2, rock, elastic, goal]);
 
     // ボールの状態を管理するフラグ
     var rockLaunched = false;
