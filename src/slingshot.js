@@ -7,13 +7,13 @@ import { createWallStatge1 } from "./object/wall";
 import { getLanchRockInfo } from "./func/getLanchRockInfo";
 import { initEventHandler } from "./event/initEventHandler";
 import { globalRoomInfo } from "./globalValue/globalVal";
+import websocketService from "./service/websocket/fetch";
 
 // グローバルにMatterを提供（slingshot.jsで使用できるようにする）
 window.Matter = Matter;
 
 // スリングショットの起動関数
 function initSlingshot() {
-  initEventHandler();
   var Example = window.Example || {};
 
   Example.slingshot = function () {
@@ -34,8 +34,11 @@ function initSlingshot() {
       world = engine.world;
 
     // create renderer
+    const renderElement = document.createElement("div");
+    renderElement.id = "gameRenderCanvasID"; // ID名を設定
+    document.body.appendChild(renderElement);
     var render = Render.create({
-      element: document.body,
+      element: renderElement,
       engine: engine,
       options: {
         width: 1200,
@@ -43,8 +46,9 @@ function initSlingshot() {
         showAngleIndicator: true,
       },
     });
-
     let dragStartPosition;
+    //renderElement.style.visibility = "hidden";
+    initEventHandler(websocketService);
 
     Render.run(render);
 
@@ -206,22 +210,29 @@ function initSlingshot() {
         rock.collisionFilter.mask = 1;
         const lanchVec = getLanchRockInfo(rock, anchor);
         Body.setPosition(rock, { x: anchor.x, y: anchor.y });
-        console.log(lanchVec);
-        setTimeout(function () {
-          rockLaunched = true;
-          elastic.bodyB = null;
-          elastic.render.visible = false;
-          launchRock(
-            rock,
-            Matter,
-            {
-              x: lanchVec.normalizedDirection.x * lanchVec.strength,
-              y: lanchVec.normalizedDirection.y * lanchVec.strength,
-            },
-            false
-          );
-        }, 2000);
+        websocketService.sendShot(lanchVec.normalizedDirection);
       }
+    });
+
+    window.addEventListener("ballVectorReceived", (event) => {
+      const vectorData = event.detail;
+      console.log(event);
+      rockLaunched = true;
+      elastic.bodyB = null;
+      elastic.render.visible = false;
+      launchRock(
+        rock,
+        Matter,
+        {
+          x: vectorData.x * 1,
+          y: vectorData.y * 1,
+        },
+        false
+      );
+    });
+
+    window.addEventListener("goalScored", () => {
+      showGoalAnimation();
     });
 
     return {

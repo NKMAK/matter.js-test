@@ -19,8 +19,8 @@ export const globalRoomInfo = new Proxy(
       if (key === "isRoomCreate") {
         gameStartBtnVisibleHandler(value);
       }
-      target[key] = value; // 値を実際に設定
-      return true; // 処理が成功したことを示す
+      target[key] = value;
+      return true;
     },
   }
 );

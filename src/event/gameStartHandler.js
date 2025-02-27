@@ -1,19 +1,23 @@
 import { globalRoomInfo } from "../globalValue/globalVal";
 const gameStartBtnDom = document.getElementById("gameStartID");
+const initMenuDom = document.getElementById("initMenuID");
+const myCanvasDom = document.getElementById("gameRenderCanvasID");
 
 export const gameStartBtnVisibleHandler = (isCreate) => {
   if (isCreate) {
-    gameStartBtnDom.style.display = "block";
-    gameStartHandler();
+    gameStartBtnDom.style.visibility = "visible";
   } else {
-    gameStartBtnDom.style.display = "none";
+    gameStartBtnDom.style.visibility = "hidden";
   }
 };
 
-const gameStartHandler = () => {
-  gameStartBtnDom.addEventListener("click", () => {
+export const gameStartHandler = (websocketService) => {
+  gameStartBtnDom.addEventListener("click", async () => {
     try {
       console.log("ゲームスタートfetch" + globalRoomInfo.roomID);
+      await websocketService.startGame();
+      initMenuDom.style.display = "none";
+      // myCanvasDom.style.visibility = "visible";
     } catch (e) {
       console.error(e);
     }
