@@ -166,7 +166,7 @@ function initSlingshot() {
           // 発射フラグをリセット
           rockLaunched = false;
           waitForRockToStop = false;
-          //websocketService.notifyNoGoal();
+          websocketService.notifyNoGoal();
         }, 300); // 少し待ってから停止処理
       }
     });

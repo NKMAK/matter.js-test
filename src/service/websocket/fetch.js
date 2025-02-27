@@ -173,6 +173,7 @@ class WebSocketService {
       globalRoomInfo.roomID = room.room_id;
       globalRoomInfo.userUID = room.room_owner_id;
       globalRoomInfo.isRoomCreate = true;
+      document.getElementById("testID").textContent = room.room_id;
       console.log(
         `ルームが作成されました: ${room.room_id}, オーナーID: ${room.room_owner_id}`
       );
