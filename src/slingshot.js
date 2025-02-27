@@ -64,6 +64,7 @@ function initSlingshot() {
     // ボールの初期位置を中央寄りに
     var rock = Bodies.polygon(250, 600, 8, 20, rockOptions, { label: "ball" });
     var anchor = { x: 250, y: 600 };
+    let isTest = false;
 
     // ボールの初期位置を中央寄りに
     var rockOptions = {
@@ -166,7 +167,10 @@ function initSlingshot() {
           // 発射フラグをリセット
           rockLaunched = false;
           waitForRockToStop = false;
-          websocketService.notifyNoGoal();
+          if (!isTest) {
+            websocketService.notifyNoGoal();
+            isTest = true;
+          }
         }, 300); // 少し待ってから停止処理
       }
     });
@@ -197,6 +201,7 @@ function initSlingshot() {
     Events.on(mouseConstraint, "startdrag", function (event) {
       if (event.body === rock) {
         console.log("ok1");
+        isTest = false;
         dragStartPosition = { x: rock.position.x, y: rock.position.y };
         // ドラッグ中は壁とのみ衝突（他のオブジェクトとは衝突しない）
         rock.collisionFilter.mask = 0x0001;
