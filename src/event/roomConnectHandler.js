@@ -4,7 +4,7 @@ const connectInputDom = document.getElementById("connectID");
 const createRoomBtnDom = document.getElementById("createRoomID");
 const joinRoomBtnDom = document.getElementById("joinRoomID");
 const initMenuDom = document.getElementById("initMenuID");
-const myCanvasDom = document.getElementById("gameRenderCanvasID");
+const myCanvasDom = document.getElementById("myCanvas");
 
 export function roomConnectHandler(websocketService) {
   connectInputDom.addEventListener("input", (e) => {
@@ -21,7 +21,7 @@ export function roomConnectHandler(websocketService) {
     try {
       await websocketService.joinRoom(globalRoomInfo.roomID);
       initMenuDom.style.display = "none";
-      //myCanvasDom.style.visibility = "visible";
+      myCanvasDom.style.visibility = "visible";
     } catch (e) {
       console.error(e);
     }

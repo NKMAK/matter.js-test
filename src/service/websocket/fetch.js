@@ -68,8 +68,14 @@ class WebSocketService {
       case "ready_shot":
         this.handleVectorData(message);
         break;
-      case "goal":
+      case "reach_goal":
         this.handleGoal(message);
+        break;
+      case "reach_no_goal":
+        this.handleNoGoal(message);
+        break;
+      case "wait_for_next_shot":
+        this.handleNoGoal(message);
         break;
       case "game_over":
         this.handleGameOver(message);
@@ -117,7 +123,14 @@ class WebSocketService {
 
   notifyGoal() {
     return this.ensureConnectedAndSend({
-      event_type: "goal",
+      event_type: "reach_goal",
+      room: { room_id: globalRoomInfo.roomID },
+    });
+  }
+
+  notifyNoGoal() {
+    return this.ensureConnectedAndSend({
+      event_type: "reach_no_goal",
       room: { room_id: globalRoomInfo.roomID },
     });
   }
@@ -219,9 +232,14 @@ class WebSocketService {
     const { room } = message;
     globalRoomInfo.isGoal = true;
     console.log(`ルーム ${room?.room_id} でゴールが決まりました`);
-
+    alert("ゴールが決まりました");
     const goalEvent = new CustomEvent("goalScored");
     window.dispatchEvent(goalEvent);
+  }
+
+  handleNoGoal(message) {
+    const { room } = message;
+    console.log("ゴールできなかった");
   }
 
   handleGameOver(message) {
@@ -229,7 +247,8 @@ class WebSocketService {
 
     console.log(`ルーム ${room?.room_id} でゲームが終了しました`);
 
-    //TODOイベントハンドラーに登録する
+    alert("おめでとうございます！ゴールしました");
+    //　何も使ってないイベント
     const gameOverEvent = new CustomEvent("gameOver");
     window.dispatchEvent(gameOverEvent);
 

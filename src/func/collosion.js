@@ -1,4 +1,4 @@
-export function eventCollision(Events, engine) {
+export function eventCollision(Events, engine, websocketService) {
   Events.on(engine, "collisionStart", function (event) {
     let pairs = event.pairs;
     for (let i = 0; i < pairs.length; i++) {
@@ -8,6 +8,7 @@ export function eventCollision(Events, engine) {
         (pair.bodyA.label === "ball" && pair.bodyB.label === "goal");
       if (isGoal) {
         console.log("ゴール");
+        websocketService.notifyGoal();
       }
     }
   });

@@ -34,8 +34,7 @@ function initSlingshot() {
       world = engine.world;
 
     // create renderer
-    const renderElement = document.createElement("div");
-    renderElement.id = "gameRenderCanvasID"; // ID名を設定
+    const renderElement = document.getElementById("myCanvas");
     document.body.appendChild(renderElement);
     var render = Render.create({
       element: renderElement,
@@ -47,7 +46,7 @@ function initSlingshot() {
       },
     });
     let dragStartPosition;
-    //renderElement.style.visibility = "hidden";
+    renderElement.style.visibility = "hidden";
     initEventHandler(websocketService);
 
     Render.run(render);
@@ -113,7 +112,7 @@ function initSlingshot() {
     var rockLaunched = false;
     var waitForRockToStop = false;
 
-    eventCollision(Events, engine);
+    eventCollision(Events, engine, websocketService);
 
     Events.on(engine, "afterUpdate", function () {
       // ボールが発射されたかチェック
@@ -167,6 +166,7 @@ function initSlingshot() {
           // 発射フラグをリセット
           rockLaunched = false;
           waitForRockToStop = false;
+          //websocketService.notifyNoGoal();
         }, 300); // 少し待ってから停止処理
       }
     });
@@ -210,6 +210,7 @@ function initSlingshot() {
         rock.collisionFilter.mask = 1;
         const lanchVec = getLanchRockInfo(rock, anchor);
         Body.setPosition(rock, { x: anchor.x, y: anchor.y });
+
         websocketService.sendShot(lanchVec.normalizedDirection);
       }
     });
@@ -224,15 +225,15 @@ function initSlingshot() {
         rock,
         Matter,
         {
-          x: vectorData.x * 1,
-          y: vectorData.y * 1,
+          x: vectorData.x * 10,
+          y: vectorData.y * 10,
         },
         false
       );
     });
 
     window.addEventListener("goalScored", () => {
-      showGoalAnimation();
+      console.log("goal");
     });
 
     return {
