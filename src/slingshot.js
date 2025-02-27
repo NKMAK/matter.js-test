@@ -5,12 +5,14 @@ import { eventCollision } from "./func/collosion";
 import { launchRock } from "./func/launchRock";
 import { createWallStatge1 } from "./object/wall";
 import { getLanchRockInfo } from "./func/getLanchRockInfo";
+import { initEventHandler } from "./event/initEventHandler";
 
 // グローバルにMatterを提供（slingshot.jsで使用できるようにする）
 window.Matter = Matter;
 
 // スリングショットの起動関数
 function initSlingshot() {
+  initEventHandler();
   var Example = window.Example || {};
 
   Example.slingshot = function () {
