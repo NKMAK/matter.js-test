@@ -14,6 +14,8 @@
       <button id="gameStartID">ゲームスタート</button>
     </div>
 
+    <div id="myCanvas"></div>
+
     <script type="module" src="./src/slingshot.js"></script>
   </body>
 </html>
@@ -24,5 +26,47 @@
     margin: 0 auto;
     width: 70%;
     height: 70%;
+  }
+
+  #initMenuID {
+    max-width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+
+  #connectID {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  #createRoomID,
+  #joinRoomID,
+  #gameStartID {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  #gameStartID {
+    background-color: #34a853;
+    margin-top: 15px;
+    padding: 8px 15px;
+  }
+
+  #createRoomID:hover,
+  #joinRoomID:hover,
+  #gameStartID:hover {
+    opacity: 0.9;
   }
 </style>
