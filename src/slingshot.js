@@ -6,6 +6,7 @@ import { launchRock } from "./func/launchRock";
 import { createWallStatge1 } from "./object/wall";
 import { getLanchRockInfo } from "./func/getLanchRockInfo";
 import { initEventHandler } from "./event/initEventHandler";
+import { globalRoomInfo } from "./globalValue/globalVal";
 
 // グローバルにMatterを提供（slingshot.jsで使用できるようにする）
 window.Matter = Matter;
